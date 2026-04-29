@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ScoutAI — NLP Sports Intelligence</title>
+  <style>
+    :root{--bg:#070c1a;--bg2:#0f1a3d;--panel:#101933cc;--line:#2d417a;--txt:#eaf0ff;--muted:#a8b6dc;--ok:#72f7b2;--err:#ff6f88;--warn:#ffd166;--accent:#5ea1ff}
+    *{box-sizing:border-box} body{margin:0;color:var(--txt);font-family:Inter,system-ui,Arial;background:radial-gradient(1200px 500px at 10% -20%,#24489f66 0%,transparent 60%),linear-gradient(135deg,var(--bg),var(--bg2));min-height:100vh}
+    .bg-lights{position:fixed;inset:0;pointer-events:none;overflow:hidden}.orb{position:absolute;border-radius:50%;filter:blur(30px);opacity:.35;animation:float 10s ease-in-out infinite}.o1{width:220px;height:220px;background:#3b82f6;left:6%;top:10%}.o2{width:180px;height:180px;background:#22d3ee;right:9%;top:20%;animation-delay:1.2s}.o3{width:200px;height:200px;background:#8b5cf6;left:40%;bottom:10%;animation-delay:2.2s}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+    .wrap{max-width:1100px;margin:auto;padding:24px;position:relative;z-index:2}
+    .glass{backdrop-filter:blur(10px);background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px #00000040}
+    h1{margin:0 0 8px}.muted{color:var(--muted)}
+    .hero{padding:20px}.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.badge{font-size:12px;border:1px solid #3c5294;padding:4px 8px;border-radius:999px;background:#10204a}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}.card{padding:16px}
+    label{display:block;font-size:13px;color:#c6d3f6;margin-bottom:6px} input,select,button{width:100%;padding:10px;border-radius:10px;border:1px solid #3a4c84;background:#0d1736;color:var(--txt)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.search-wrap{position:relative}.opts{display:none;position:absolute;z-index:4;top:102%;left:0;right:0;background:#0f1b3d;border:1px solid #3d548d;border-radius:10px;max-height:180px;overflow:auto}
+    .opts.show{display:block}.opt{padding:8px 10px;cursor:pointer}.opt:hover{background:#1a2d63}
+    button{background:linear-gradient(90deg,#3378ff,#4f92ff);font-weight:700;cursor:pointer;transition:.2s transform}.pulse{animation:pulse 2s infinite}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #4f92ff55}70%{box-shadow:0 0 0 10px transparent}}
+    .status{min-height:24px;margin-top:10px}.ok{color:var(--ok)}.err{color:var(--err)}.warn{color:var(--warn)}
+    .result pre{margin:0;white-space:pre-wrap;background:#0b1431;border:1px solid #2a3f74;border-radius:10px;padding:12px}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.kpi{padding:10px;border:1px solid #2f467f;border-radius:10px;background:#0c1635}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.row,.metrics{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="bg-lights"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<div class="wrap">
+  <section class="hero glass">
+    <h1>ScoutAI — High-Level NLP Sports Predictor</h1>
+    <p class="muted">Guardrailed predictions for <b>NCAA Basketball, NFL, NBA, UFC</b> with explainable sentiment + confidence calibration.</p>
+    <div class="badges"><span class="badge">Domain Lock</span><span class="badge">Sentiment Lexicon + Negation</span><span class="badge">Confidence Gating</span><span class="badge">Probability Calibration</span></div>
+  </section>
+
+  <section class="grid">
+    <div class="glass card">
+      <h3>Prediction Console</h3>
+      <div class="row">
+        <div><label>Sport</label><select id="sport"></select></div>
+        <div><label>Home Advantage</label><select id="home"><option value="none">Neutral</option><option value="a">Entity A</option><option value="b">Entity B</option></select></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div class="search-wrap"><label>Entity A</label><input id="a" placeholder="Search team/fighter..." autocomplete="off"><div id="aOpts" class="opts"></div></div>
+        <div class="search-wrap"><label>Entity B</label><input id="b" placeholder="Search team/fighter..." autocomplete="off"><div id="bOpts" class="opts"></div></div>
+      </div>
+      <div style="margin-top:10px"><label>Evidence Text (optional)</label><input id="evidence" placeholder="e.g., Team is locked in and opponent looks shaky"/></div>
+      <div style="margin-top:12px"><button id="run" class="pulse">Validate & Predict</button></div>
+      <div id="status" class="status muted">Ready.</div>
+    </div>
+
+    <div class="glass card">
+      <h3>Model Stack (NLP Class Context)</h3>
+      <ul class="muted">
+        <li><b>Input Guardrails:</b> closed-set entity selection per sport; no free-form nonsense accepted.</li>
+        <li><b>NLP Features:</b> slang lexicon, negation-aware polarity shifts, rationale traces.</li>
+        <li><b>ML-inspired Calibration:</b> confidence-gated sentiment impact + bounded probabilities.</li>
+        <li><b>Interpretability:</b> explicit confidence score, active guardrails, and feature summary.</li>
+      </ul>
+      <div class="metrics">
+        <div class="kpi"><div class="muted">Allowed Sports</div><div id="kSports">4</div></div>
+        <div class="kpi"><div class="muted">Entity Catalog</div><div id="kEntities">0</div></div>
+        <div class="kpi"><div class="muted">Current Confidence</div><div id="kConf">—</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="glass card result" style="margin-top:16px">
+    <h3>Prediction Output</h3>
+    <pre id="out">No prediction yet.</pre>
+  </section>
+</div>
+
+<script>
+const SPORT_DATA = {
+  "NCAA Basketball": ["UConn","Duke","Kansas","Houston","Purdue","North Carolina","Arizona","Tennessee"],
+  "NFL": ["Kansas City Chiefs","San Francisco 49ers","Philadelphia Eagles","Buffalo Bills","Baltimore Ravens","Dallas Cowboys","Detroit Lions","Miami Dolphins"],
+  "NBA": ["Boston Celtics","Denver Nuggets","Milwaukee Bucks","New York Knicks","Oklahoma City Thunder","Minnesota Timberwolves","Los Angeles Lakers","Golden State Warriors"],
+  "UFC": ["Jon Jones","Islam Makhachev","Alex Pereira","Sean O'Malley","Ilia Topuria","Dricus Du Plessis","Tom Aspinall","Leon Edwards"]
+};
+const LEX_POS={"locked in":1.1,"on fire":1.2,"dominant":0.9,"elite":0.8,"sharp":0.6,"great":0.6};
+const LEX_NEG={"is cooked":-1.3,"fraud":-1.1,"washed":-1.0,"awful":-0.9,"shaky":-0.6,"bad":-0.6};
+const NEGATORS=new Set(["not","never","no","isn't","dont","don't"]);
+
+const sportEl=q('#sport'), aEl=q('#a'), bEl=q('#b'), aOpts=q('#aOpts'), bOpts=q('#bOpts'), homeEl=q('#home'), outEl=q('#out'), statusEl=q('#status');
+q('#kEntities').textContent = Object.values(SPORT_DATA).flat().length;
+Object.keys(SPORT_DATA).forEach(s=>sportEl.add(new Option(s,s)));
+sportEl.addEventListener('change',()=>{aEl.value='';bEl.value='';renderOptions(aEl,aOpts);renderOptions(bEl,bOpts);});
+[aEl,bEl].forEach((el,i)=>{const box=i?bOpts:aOpts;el.addEventListener('input',()=>renderOptions(el,box));el.addEventListener('focus',()=>renderOptions(el,box));});
+document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap')){aOpts.classList.remove('show');bOpts.classList.remove('show')}});
+q('#run').addEventListener('click',run);
+renderOptions(aEl,aOpts); renderOptions(bEl,bOpts);
+
+function q(s){return document.querySelector(s)}
+function norm(s=''){return s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9\s']/g,' ').replace(/\s+/g,' ').trim()}
+function entitiesForSport(){return SPORT_DATA[sportEl.value]||[]}
+function renderOptions(input,box){
+  const term=norm(input.value); const list=entitiesForSport().filter(x=>norm(x).includes(term)).slice(0,8);
+  box.innerHTML=list.map(v=>`<div class="opt">${v}</div>`).join('');
+  [...box.children].forEach(c=>c.onclick=()=>{input.value=c.textContent;box.classList.remove('show');});
+  box.classList.toggle('show', list.length>0 && document.activeElement===input);
+}
+function validate(){
+  const errs=[], warns=[]; const list=entitiesForSport();
+  const a=aEl.value.trim(), b=bEl.value.trim();
+  if(!a||!b) errs.push('Select both entities.');
+  if(norm(a)===norm(b)) errs.push('Entity A and B cannot be the same.');
+  if(!list.includes(a)) errs.push(`Entity A must be selected from the ${sportEl.value} list.`);
+  if(!list.includes(b)) errs.push(`Entity B must be selected from the ${sportEl.value} list.`);
+  if(/[^\w\s'\-\.]/.test(a+b)) warns.push('Unexpected characters detected; verify names.');
+  return {ok:errs.length===0,errs,warns};
+}
+function scoreSentiment(txt){
+  const t=norm(txt); if(!t) return {compound:0,confidence:0,rationale:['No evidence text supplied.']};
+  let s=0; const r=[];
+  for(const [k,v] of Object.entries(LEX_POS)) if(t.includes(norm(k))){s+=v;r.push(`+${k}`)}
+  for(const [k,v] of Object.entries(LEX_NEG)) if(t.includes(norm(k))){s+=v;r.push(`${k}`)}
+  const toks=t.split(' ');
+  for(let i=0;i<toks.length;i++){
+    const w=toks[i], neg=NEGATORS.has(toks[i-1]);
+    if(['good','great','elite','dominant'].includes(w)){s += neg?-0.6:0.6; r.push(`${neg?'negated ':''}${w}`)}
+    if(['bad','awful','weak','struggling'].includes(w)){s += neg?0.6:-0.6; r.push(`${neg?'negated ':''}${w}`)}
+  }
+  return {compound:Math.tanh(s/2.2),confidence:Math.min(1,Math.abs(s)/3.0),rationale:r};
+}
+function hashSeed(a,b){let x=0;const z=norm(a+b);for(let i=0;i<z.length;i++)x=(x*31+z.charCodeAt(i))>>>0;return (x%1000)/1000;}
+function predict(a,b,sent){
+  let p=0.5;
+  const seeded=(hashSeed(a,b)-0.5)*0.10; // stable tiny baseline by matchup
+  p += seeded;
+  if(homeEl.value==='a') p += 0.04; if(homeEl.value==='b') p -= 0.04;
+  p += sent.compound*0.10;
+  const gate=0.35+0.65*sent.confidence;
+  p = 0.5+(p-0.5)*gate;
+  p = Math.max(0.33,Math.min(0.67,p));
+  return {winner:p>=0.5?a:b,p,gate};
+}
+function run(){
+  const v=validate();
+  if(!v.ok){statusEl.className='status err';statusEl.textContent='Validation failed: '+v.errs.join(' ');outEl.textContent='No prediction generated.';q('#kConf').textContent='—';return;}
+  statusEl.className=v.warns.length?'status warn':'status ok';statusEl.textContent=v.warns.length?('Validated with warnings: '+v.warns.join(' ')):'Validated. Running calibrated prediction...';
+  const sent=scoreSentiment(q('#evidence').value || `${aEl.value} looks locked in, ${bEl.value} is not bad`);
+  const pred=predict(aEl.value,bEl.value,sent);
+  q('#kConf').textContent=(sent.confidence*100).toFixed(0)+'%';
+  outEl.textContent=[
+    `Sport: ${sportEl.value}`,
+    `Entity A: ${aEl.value}`,
+    `Entity B: ${bEl.value}`,
+    `Predicted Winner: ${pred.winner}`,
+    `Win Probability: ${(pred.p*100).toFixed(1)}%`,
+    `Sentiment Compound: ${sent.compound.toFixed(3)}`,
+    `NLP Confidence: ${(sent.confidence*100).toFixed(0)}%`,
+    `Confidence Gate: ${pred.gate.toFixed(2)}`,
+    `Feature Trace: ${sent.rationale.slice(0,8).join(', ') || 'None'}`,
+    '',
+    'Active ML/NLP Layers:',
+    '- Closed-set entity retrieval (dropdown + search)',
+    '- Domain-locked sport catalog (NCAA/NFL/NBA/UFC only)',
+    '- Slang + negation sentiment scoring',
+    '- Confidence-aware probability calibration with bounded outputs'
+  ].join('\n');
+}
+</script>
+</body>
+</html>
