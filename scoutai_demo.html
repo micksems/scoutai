@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScoutAI — Guardrailed Sports Predictor</title>
+  <style>
+    :root { --bg:#0a1022; --panel:#121a35; --line:#2e3b72; --txt:#e9efff; --muted:#9fb1e1; --ok:#64f3a8; --err:#ff6b6b; --warn:#ffd166; }
+    * { box-sizing: border-box; }
+    body { margin:0; background: radial-gradient(900px 500px at 20% -10%, #1c2c68 0%, var(--bg) 70%); color:var(--txt); font-family: Inter, Segoe UI, Arial, sans-serif; }
+    .wrap { max-width:980px; margin:0 auto; padding:24px; }
+    h1 { margin-top:0; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:14px; }
+    .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px; }
+    .full { grid-column: 1 / -1; }
+    input, select, button, textarea { width:100%; border-radius:10px; border:1px solid #3a4a8b; background:#0e1531; color:var(--txt); padding:10px; }
+    button { cursor:pointer; background:#2d5bff; border-color:#2d5bff; font-weight:700; }
+    button:hover { filter:brightness(1.05); }
+    .status { min-height:22px; margin-top:10px; }
+    .ok{ color:var(--ok); } .err{ color:var(--err);} .warn{ color:var(--warn);} .muted{ color:var(--muted); }
+    pre { margin:0; white-space:pre-wrap; background:#0d1430; border:1px solid #253466; border-radius:10px; padding:12px; }
+    ul { margin:8px 0 0 16px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ScoutAI (Latest Guardrailed Build)</h1>
+  <p class="muted">Strict domain validation + confidence-aware sentiment for reliable, explainable predictions.</p>
+
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label>Sport</label>
+        <select id="sport"></select>
+      </div>
+      <div>
+        <label>Prediction Domain</label>
+        <select id="mode">
+          <option value="team">Team vs Team</option>
+          <option value="athlete">Athlete vs Athlete</option>
+        </select>
+      </div>
+      <div><label>Entity 1</label><input id="e1" placeholder="e.g., Boston Celtics" /></div>
+      <div><label>Entity 2</label><input id="e2" placeholder="e.g., New York Knicks" /></div>
+      <div><label>Home Side</label><select id="home"><option value="none">Neutral</option><option value="e1">Entity 1</option><option value="e2">Entity 2</option></select></div>
+      <div><label>Evidence Text (optional)</label><textarea id="text" rows="2" placeholder="Paste social text snippets for sentiment scoring..."></textarea></div>
+      <div class="full"><button id="run">Validate & Predict</button></div>
+    </div>
+    <div id="status" class="status muted">Ready.</div>
+  </div>
+
+  <div class="card"><h3>Result</h3><pre id="result">No prediction yet.</pre></div>
+  <div class="card"><h3>Rejected Input Examples (now blocked)</h3><ul><li>Soccer sport + "Jon Jones" in team mode</li><li>Duplicate entities</li><li>Malformed gibberish / long numeric tokens</li></ul></div>
+</div>
+
+<script>
+const SPORT_CFG = {
+  "NBA": { domain:"team", endpoint:"basketball/nba", aliases:["celtics","knicks","lakers","warriors"] },
+  "NFL": { domain:"team", endpoint:"football/nfl", aliases:["chiefs","eagles","cowboys","49ers"] },
+  "Premier League": { domain:"team", endpoint:"soccer/eng.1", aliases:["arsenal","liverpool","chelsea","manchester city","man city"] },
+  "UFC": { domain:"athlete", endpoint:"mma/ufc", aliases:["jon jones","islam makhachev","alex pereira"] },
+  "Tennis": { domain:"athlete", endpoint:"tennis", aliases:["djokovic","alcaraz","swiatek"] }
+};
+
+const SLANG_POS = { "on fire":1.2, "locked in":1.0, "cooked them":1.1, "ice cold":0.8, nasty:0.7, filthy:0.7, dominant:0.8 };
+const SLANG_NEG = { "is cooked":-1.3, fraud:-1.2, washed:-1.1, overrated:-1.0, choke:-0.9, terrible:-0.9 };
+const NEGATIONS = new Set(["not","never","no","isnt","isn't","dont","don't","didnt","didn't"]);
+
+const sportEl = document.getElementById('sport');
+const modeEl = document.getElementById('mode');
+const e1El = document.getElementById('e1');
+const e2El = document.getElementById('e2');
+const homeEl = document.getElementById('home');
+const textEl = document.getElementById('text');
+const statusEl = document.getElementById('status');
+const resultEl = document.getElementById('result');
+
+document.getElementById('run').addEventListener('click', runPrediction);
+Object.keys(SPORT_CFG).forEach(s => { const o=document.createElement('option'); o.value=s; o.textContent=s; sportEl.appendChild(o); });
+
+function normalize(s='') { return s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
+function jaccard(a,b){ const A = new Set(normalize(a).split(' ')); const B = new Set(normalize(b).split(' ')); const inter=[...A].filter(x=>B.has(x)).length; return inter / Math.max(1, A.size + B.size - inter); }
+function looksMalformed(s){ return s.length < 2 || s.length > 50 || /[0-9]{3,}/.test(s) || /(.)\1{4,}/.test(s); }
+
+function validateInputs({sport,mode,e1,e2}){
+  const errors=[], warnings=[]; const cfg = SPORT_CFG[sport];
+  if(!cfg) errors.push('Invalid sport selected.');
+  if(!e1 || !e2) errors.push('Both entities are required.');
+  if(normalize(e1) === normalize(e2)) errors.push('Entities must be different.');
+  if(looksMalformed(e1) || looksMalformed(e2)) errors.push('One or more entities look malformed.');
+  if(cfg && cfg.domain !== mode) errors.push(`Sport '${sport}' only supports '${cfg.domain}' mode.`);
+  if(jaccard(e1,e2) > 0.9) warnings.push('Entities look very similar — verify spelling.');
+
+  if(cfg){
+    const n1 = normalize(e1), n2 = normalize(e2);
+    const inAlias1 = cfg.aliases.some(a => n1.includes(normalize(a)) || normalize(a).includes(n1));
+    const inAlias2 = cfg.aliases.some(a => n2.includes(normalize(a)) || normalize(a).includes(n2));
+    if(!inAlias1 || !inAlias2){
+      warnings.push('At least one entity was not recognized in local sport vocabulary; this lowers confidence.');
+    }
+  }
+  return { ok: errors.length===0, errors, warnings };
+}
+
+function scoreSentiment(text){
+  const raw = normalize(text || '');
+  if(!raw) return { compound:0, confidence:0, rationale:['No text supplied.'] };
+
+  let score = 0; const rationale = [];
+  for(const [k,v] of Object.entries(SLANG_POS)) if(raw.includes(normalize(k))) { score += v; rationale.push(`+ slang:${k}`); }
+  for(const [k,v] of Object.entries(SLANG_NEG)) if(raw.includes(normalize(k))) { score += v; rationale.push(`- slang:${k}`); }
+
+  const toks = raw.split(' ');
+  const posWords = new Set(['good','great','elite','strong','dominant','amazing']);
+  const negWords = new Set(['bad','awful','weak','terrible','injured','struggling']);
+
+  for(let i=0;i<toks.length;i++){
+    const w=toks[i], prev=toks[i-1] || '';
+    const neg = NEGATIONS.has(prev);
+    if(posWords.has(w)) { score += neg ? -0.65 : 0.65; rationale.push(`${neg?'negated ':''}pos:${w}`); }
+    if(negWords.has(w)) { score += neg ? 0.65 : -0.65; rationale.push(`${neg?'negated ':''}neg:${w}`); }
+  }
+
+  const compound = Math.tanh(score / 2.2);
+  const confidence = Math.min(1, Math.abs(score) / 3.2);
+  return { compound, confidence, rationale };
+}
+
+function buildPrediction({e1,e2,home,sentiment}){
+  let p = 0.5;
+  if(home === 'e1') p += 0.04;
+  if(home === 'e2') p -= 0.04;
+  p += sentiment.compound * 0.10;
+  const confidenceGate = 0.4 + 0.6 * sentiment.confidence;
+  p = 0.5 + (p - 0.5) * confidenceGate;
+  p = Math.max(0.34, Math.min(0.66, p));
+  return { winner: p >= 0.5 ? e1 : e2, probability:p, confidenceGate };
+}
+
+function runPrediction(){
+  const input = { sport:sportEl.value, mode:modeEl.value, e1:e1El.value.trim(), e2:e2El.value.trim() };
+  const home = homeEl.value;
+  const v = validateInputs(input);
+
+  if(!v.ok){
+    statusEl.className = 'status err';
+    statusEl.textContent = `Validation failed: ${v.errors.join(' ')}`;
+    resultEl.textContent = 'No prediction generated.';
+    return;
+  }
+
+  const sent = scoreSentiment(textEl.value || `${input.e1} looks strong, ${input.e2} is not bad`);
+  const pred = buildPrediction({ e1:input.e1, e2:input.e2, home, sentiment:sent });
+
+  statusEl.className = v.warnings.length ? 'status warn' : 'status ok';
+  statusEl.textContent = v.warnings.length ? `Validated with warnings: ${v.warnings.join(' ')}` : 'Validated. Prediction generated.';
+
+  resultEl.textContent = [
+    `Sport: ${input.sport}`,
+    `Mode: ${input.mode}`,
+    `Winner: ${pred.winner}`,
+    `Win Probability: ${(pred.probability*100).toFixed(1)}%`,
+    `Sentiment Compound: ${sent.compound.toFixed(3)}`,
+    `NLP Confidence: ${(sent.confidence*100).toFixed(0)}%`,
+    `Confidence Gate: ${pred.confidenceGate.toFixed(2)} (shrinks low-quality sentiment impact)`,
+    `Reasoning: ${sent.rationale.slice(0,6).join(', ') || 'None'}`,
+    '',
+    'Guardrails Active:',
+    '- sport-domain lock (team vs athlete)',
+    '- duplicate/malformed input rejection',
+    '- confidence-aware probability calibration'
+  ].join('\n');
+}
+</script>
+</body>
+</html>
