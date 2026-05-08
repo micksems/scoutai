@@ -3,59 +3,6 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ScoutAI — March Madness Predictions</title>
-  <style>
-    :root{--bg:#050706;--card:#101712;--line:#213126;--txt:#f5fff9;--muted:#9dad9f;--green:#35f28a;--green2:#9affc5;--warn:#ffd166;--err:#ff718e}
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:radial-gradient(800px 420px at 18% 0%,rgba(53,242,138,.18),transparent 60%),linear-gradient(145deg,#050706,#0b1410);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,Segoe UI,system-ui,sans-serif;display:grid;place-items:center;padding:24px}
-    main{width:min(760px,100%)}
-    .brand{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-weight:800;letter-spacing:-.02em}.logo{width:30px;height:30px;border-radius:10px;background:linear-gradient(145deg,var(--green),#eafff1);box-shadow:0 0 34px rgba(53,242,138,.38)}
-    .card{background:rgba(16,23,18,.88);border:1px solid rgba(255,255,255,.10);border-radius:28px;padding:28px;box-shadow:0 24px 80px rgba(0,0,0,.45);backdrop-filter:blur(18px)}
-    h1{font-size:clamp(36px,7vw,64px);line-height:.96;margin:0 0 12px;letter-spacing:-.06em}.sub{color:var(--muted);margin:0 0 24px;line-height:1.55}
-    .controls{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:750}
-    select,button{width:100%;border-radius:16px;border:1px solid var(--line);background:#07100b;color:var(--txt);padding:14px 15px;font:inherit;outline:none}select:focus{border-color:rgba(53,242,138,.68);box-shadow:0 0 0 4px rgba(53,242,138,.10)}
-    button{margin-top:16px;border:0;background:linear-gradient(145deg,var(--green),var(--green2));color:#031006;font-weight:850;cursor:pointer;box-shadow:0 16px 38px rgba(53,242,138,.22)}button:hover{transform:translateY(-1px)}
-    .status{min-height:22px;margin-top:14px;color:var(--muted);font-size:14px}.ok{color:var(--green2)}.err{color:var(--err)}.warn{color:var(--warn)}
-    pre{margin:16px 0 0;white-space:pre-wrap;background:#07100b;border:1px solid var(--line);border-radius:18px;padding:16px;line-height:1.55;color:#eafff1;min-height:160px}
-    @media(max-width:700px){.controls{grid-template-columns:1fr}.card{padding:22px}}
-  </style>
-</head>
-<body>
-<main>
-  <div class="brand"><span class="logo"></span><span>ScoutAI</span></div>
-  <section class="card">
-    <h1>March Madness predictor</h1>
-    <p class="sub">Choose Team A, Team B, and Team A location. Rosters, 48-hour sentiment, NCAA scope, and log loss are automatic.</p>
-
-    <div class="controls">
-      <div class="field"><label>Team A</label><select id="a">
-        <option value="Duke Blue Devils">Duke Blue Devils</option>
-        <option value="Kansas Jayhawks">Kansas Jayhawks</option>
-        <option value="UConn Huskies">UConn Huskies</option>
-        <option value="Kentucky Wildcats">Kentucky Wildcats</option>
-        <option value="North Carolina Tar Heels">North Carolina Tar Heels</option>
-        <option value="Gonzaga Bulldogs">Gonzaga Bulldogs</option>
-      </select></div>
-
-      <div class="field"><label>Team B</label><select id="b">
-        <option value="Kansas Jayhawks">Kansas Jayhawks</option>
-        <option value="Duke Blue Devils">Duke Blue Devils</option>
-        <option value="UConn Huskies">UConn Huskies</option>
-        <option value="Kentucky Wildcats">Kentucky Wildcats</option>
-        <option value="North Carolina Tar Heels">North Carolina Tar Heels</option>
-        <option value="Gonzaga Bulldogs">Gonzaga Bulldogs</option>
-      </select></div>
-
-      <div class="field full"><label>Team A location</label><select id="home">
-        <option value="home">Home</option>
-        <option value="away">Away</option>
-        <option value="neutral">Neutral</option>
-      </select></div>
-    </div>
-
-    <button id="run">Run prediction</button>
-    <div id="status" class="status">Ready.</div>
-    <pre id="out">No prediction yet.</pre>
   <title>ScoutAI — NCAA Basketball Predictions</title>
   <style>
     :root{
@@ -73,9 +20,6 @@
     .hero-copy{padding:42px}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(53,242,138,.08);color:var(--green2);font-size:13px;font-weight:650}.dot{width:7px;height:7px;border-radius:999px;background:var(--green);box-shadow:0 0 16px var(--green)}
     h1{font-size:clamp(42px,7vw,82px);line-height:.96;margin:22px 0 18px;letter-spacing:-.065em}.lead{font-size:18px;line-height:1.65;color:var(--muted);max-width:680px}.accent{color:var(--green2)}
     .metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}.metric{padding:16px;border-radius:20px;background:rgba(0,0,0,.24);border:1px solid var(--line2)}.metric b{display:block;font-size:22px}.metric span{font-size:12px;color:var(--muted)}
-    .app{padding:22px}.fieldgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}label{font-size:12px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.08em}select,button{width:100%;border:1px solid var(--line2);border-radius:16px;background:rgba(3,6,5,.72);color:var(--txt);padding:13px 14px;font:inherit;outline:none}select:focus{border-color:rgba(53,242,138,.54);box-shadow:0 0 0 4px rgba(53,242,138,.08)}.actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}button{cursor:pointer;font-weight:760;background:linear-gradient(145deg,rgba(53,242,138,.96),rgba(154,255,197,.88));color:#031006;border:0;box-shadow:0 14px 34px rgba(53,242,138,.22);transition:transform .18s ease,box-shadow .18s ease}button:hover{transform:translateY(-1px);box-shadow:0 18px 44px rgba(53,242,138,.28)}button.secondary{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--line2);box-shadow:none}.status{min-height:22px;margin-top:12px;color:var(--muted);font-size:14px}.ok{color:var(--green2)}.err{color:var(--err)}.warn{color:var(--warn)}
-    .section{margin-top:18px;display:grid;grid-template-columns:.92fr 1.08fr;gap:18px}.card{padding:24px}.card h2,.card h3{margin:0 0 12px;letter-spacing:-.035em}.card p,.card li{color:var(--muted);line-height:1.62}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.chip{border:1px solid var(--line);background:rgba(53,242,138,.07);color:var(--green2);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:650}pre{margin:0;white-space:pre-wrap;min-height:318px;background:var(--glass2);border:1px solid var(--line2);border-radius:22px;padding:18px;color:#eafff1;line-height:1.55;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-    .source-list{display:grid;gap:10px;margin-top:14px}.source{padding:13px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid var(--line2)}.source b{display:block}.source span{color:var(--muted);font-size:13px}.mini{font-size:12px;color:var(--muted);margin-top:10px}
     .app{padding:22px}.fieldgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}label{font-size:12px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.08em}select,textarea,button{width:100%;border:1px solid var(--line2);border-radius:16px;background:rgba(3,6,5,.72);color:var(--txt);padding:13px 14px;font:inherit;outline:none}select:focus,textarea:focus{border-color:rgba(53,242,138,.54);box-shadow:0 0 0 4px rgba(53,242,138,.08)}textarea{resize:vertical;min-height:78px}.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}button{cursor:pointer;font-weight:760;background:linear-gradient(145deg,rgba(53,242,138,.96),rgba(154,255,197,.88));color:#031006;border:0;box-shadow:0 14px 34px rgba(53,242,138,.22);transition:transform .18s ease,box-shadow .18s ease}button:hover{transform:translateY(-1px);box-shadow:0 18px 44px rgba(53,242,138,.28)}button.secondary{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--line2);box-shadow:none}.status{min-height:22px;margin-top:12px;color:var(--muted);font-size:14px}.ok{color:var(--green2)}.err{color:var(--err)}.warn{color:var(--warn)}
     .section{margin-top:18px;display:grid;grid-template-columns:.92fr 1.08fr;gap:18px}.card{padding:24px}.card h2,.card h3{margin:0 0 12px;letter-spacing:-.035em}.card p,.card li{color:var(--muted);line-height:1.62}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.chip{border:1px solid var(--line);background:rgba(53,242,138,.07);color:var(--green2);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:650}pre{margin:0;white-space:pre-wrap;min-height:318px;background:var(--glass2);border:1px solid var(--line2);border-radius:22px;padding:18px;color:#eafff1;line-height:1.55;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
     .source-list{display:grid;gap:10px;margin-top:14px}.source{padding:13px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid var(--line2)}.source b{display:block}.source span{color:var(--muted);font-size:13px}.mini{font-size:12px;color:var(--muted);margin-top:10px}.logloss{display:inline-flex;align-items:center;gap:7px;color:var(--green2);font-weight:780}.logloss:before{content:"";width:9px;height:9px;border-radius:999px;background:var(--green);box-shadow:0 0 16px var(--green)}
@@ -87,19 +31,12 @@
 <main class="wrap">
   <nav class="nav">
     <div class="brand"><span class="logo"></span><span>ScoutAI</span></div>
-    <div class="navnote">NCAA March Madness basketball only · official roster signals · automatic 48-hour sentiment</div>
     <div class="navnote">NCAA basketball only · official roster signals · 48-hour sentiment window</div>
   </nav>
 
   <section class="hero">
     <div class="panel hero-copy">
       <span class="eyebrow"><span class="dot"></span>Live college hoops intelligence</span>
-      <h1>March Madness predictions, refined by live NLP.</h1>
-      <p class="lead">ScoutAI is limited to <span class="accent">NCAA March Madness basketball</span>. It blends a calibrated machine-learning style win model with official roster/team inputs and an automatic 48-hour pre-game sentiment layer, so predictions react to late injury chatter, momentum narratives, and team-specific language without overstating certainty.</p>
-      <div class="metric-row">
-        <div class="metric"><b>&lt; 0.40</b><span>log-loss threshold required to maintain a strong model signal</span></div>
-        <div class="metric"><b>48h</b><span>sentiment window before tipoff</span></div>
-        <div class="metric"><b>March</b><span>locked to NCAA March Madness basketball; no other sports</span></div>
       <h1>NCAA basketball predictions, refined by live NLP.</h1>
       <p class="lead">ScoutAI is limited to <span class="accent">NCAA men's basketball</span>. It blends a calibrated machine-learning style win model with official roster/team inputs and a 48-hour pre-game sentiment layer, so predictions react to late injury chatter, momentum narratives, and team-specific language without overstating certainty.</p>
       <div class="metric-row">
@@ -110,27 +47,6 @@
     </div>
 
     <div class="panel app">
-      <h2>Pick teams</h2>
-      <div class="fieldgrid compact-inputs">
-        <div class="field"><label>Team A</label><select id="a">
-          <option value="Duke Blue Devils">Duke Blue Devils</option>
-          <option value="Kansas Jayhawks">Kansas Jayhawks</option>
-          <option value="UConn Huskies">UConn Huskies</option>
-          <option value="Kentucky Wildcats">Kentucky Wildcats</option>
-          <option value="North Carolina Tar Heels">North Carolina Tar Heels</option>
-          <option value="Gonzaga Bulldogs">Gonzaga Bulldogs</option>
-        </select></div>
-        <div class="field"><label>Team B</label><select id="b">
-          <option value="Kansas Jayhawks">Kansas Jayhawks</option>
-          <option value="Duke Blue Devils">Duke Blue Devils</option>
-          <option value="UConn Huskies">UConn Huskies</option>
-          <option value="Kentucky Wildcats">Kentucky Wildcats</option>
-          <option value="North Carolina Tar Heels">North Carolina Tar Heels</option>
-          <option value="Gonzaga Bulldogs">Gonzaga Bulldogs</option>
-        </select></div>
-        <div class="field full"><label>Team A location</label><select id="home"><option value="a">Team A home</option><option value="b">Team A away</option></select></div>
-      </div>
-      <div class="actions single-action">
       <h2>Run a matchup</h2>
       <div class="fieldgrid">
         <div class="field full"><label>Sport scope</label><select id="sport"><option value="ncaa" selected>NCAA Men's Basketball</option></select></div>
@@ -155,13 +71,11 @@
       <ul>
         <li><b>48-hour sentiment analysis:</b> team mentions are filtered to posts created inside the two-day pre-game window and scored with a sports-specific polarity lexicon.</li>
         <li><b>Context-aware NLP beyond sentiment:</b> negation handling, slang normalization, entity mention matching, recency weighting, and confidence gating reduce noisy fan-language effects.</li>
-        <li><b>Machine-learning prediction layer:</b> a calibrated logistic blend combines neutral baseline, home-court adjustment, roster availability proxy, sentiment edge, and log-loss guardrails.</li>
         <li><b>Machine-learning prediction layer:</b> a calibrated logistic blend combines neutral baseline, home-court adjustment, roster availability proxy, sentiment edge, manual context, and log-loss guardrails.</li>
         <li><b>Calibration standard:</b> displayed predictions are treated as strong only while model log loss remains below <b>0.40</b>.</li>
       </ul>
       <div class="chips"><span class="chip">Logistic calibration</span><span class="chip">Recency weighting</span><span class="chip">Entity resolution</span><span class="chip">Negation-aware NLP</span><span class="chip">Roster proxy</span></div>
       <div class="source-list">
-        <div class="source"><b>Official team source</b><span>ESPN NCAA men's basketball teams endpoint powers the March Madness team selector.</span></div>
         <div class="source"><b>Official team source</b><span>ESPN NCAA men's basketball teams endpoint powers the team selector.</span></div>
         <div class="source"><b>Official roster source path</b><span>Selected teams are resolved to ESPN roster URLs for live roster review and downstream ingestion.</span></div>
         <div class="source"><b>Social signal source</b><span>Reddit college basketball search is filtered to the last 48 hours; PullPush is used only as a fallback.</span></div>
@@ -176,40 +90,7 @@
 </main>
 
 <script>
-const MODEL_LOG_LOSS=.36;
-let currentSentiment={a:0,b:0,rawMentions:0,source:"none",windowHours:48,aMentions:0,bMentions:0};
 const NCAA_CFG={espn:"basketball/mens-college-basketball",reddit:"CollegeBasketball",sportKey:"ncaa"};
-const MODEL_LOG_LOSS=.36;
-let currentSentiment={a:0,b:0,rawMentions:0,source:"none",windowHours:48,notes:[],aMentions:0,bMentions:0};
-let teamDetails=new Map([
-  ["Duke Blue Devils",{name:"Duke Blue Devils",id:"150",rosterUrl:"https://www.espn.com/mens-college-basketball/team/roster/_/id/150"}],
-  ["Kansas Jayhawks",{name:"Kansas Jayhawks",id:"2305",rosterUrl:"https://www.espn.com/mens-college-basketball/team/roster/_/id/2305"}],
-  ["UConn Huskies",{name:"UConn Huskies",id:"41",rosterUrl:"https://www.espn.com/mens-college-basketball/team/roster/_/id/41"}],
-  ["Kentucky Wildcats",{name:"Kentucky Wildcats",id:"96",rosterUrl:"https://www.espn.com/mens-college-basketball/team/roster/_/id/96"}],
-  ["North Carolina Tar Heels",{name:"North Carolina Tar Heels",id:"153",rosterUrl:"https://www.espn.com/mens-college-basketball/team/roster/_/id/153"}],
-  ["Gonzaga Bulldogs",{name:"Gonzaga Bulldogs",id:"2250",rosterUrl:"https://www.espn.com/mens-college-basketball/team/roster/_/id/2250"}]
-]);
-const $=s=>document.querySelector(s), aEl=$("#a"), bEl=$("#b"), statusEl=$("#status"), outEl=$("#out");
-$("#run").onclick=runPrediction;
-loadOfficialTeams();
-
-function setStatus(cls,msg){statusEl.className="status "+cls;statusEl.textContent=msg}
-function populateSelect(el,arr,selected){el.innerHTML="";arr.forEach(team=>el.add(new Option(team.name,team.name)));if(selected&&[...el.options].some(o=>o.value===selected))el.value=selected}
-function officialRosterUrl(teamName){return teamDetails.get(teamName)?.rosterUrl || "Official roster URL unavailable"}
-async function fetchOfficialRoster(teamName){
-  const team=teamDetails.get(teamName);
-  if(!team?.id) return {rosterCount:0,source:"fallback"};
-let teamDetails=new Map();
-const $=s=>document.querySelector(s), aEl=$("#a"), bEl=$("#b"), statusEl=$("#status"), outEl=$("#out");
-$("#run").onclick=runPrediction;
-loadOfficialTeams();
-assertOnlyAllowedControls();
-
-function assertOnlyAllowedControls(){
-  const forbidden=["sport","logloss","sent","load","manual"];
-  const present=forbidden.filter(id=>document.getElementById(id));
-  if(present.length){throw new Error(`Unexpected controls present: ${present.join(", ")}`)}
-}
 const POS={"locked in":1.15,"on fire":1.2,"dominant":.85,"elite":.82,"great":.62,"sharp":.54,"healthy":.48,"available":.35,"deep bench":.45,"hot shooting":.74,"rim protection":.42};
 const NEG={"is cooked":-1.25,"fraud":-1.08,"washed":-.95,"awful":-.78,"bad":-.58,"shaky":-.52,"questionable":-.46,"out tonight":-.9,"injured":-.72,"turnover prone":-.56,"cold shooting":-.68};
 const NEGATORS=new Set(["not","never","no","isn't","dont","don't","without"]);
@@ -230,68 +111,15 @@ async function fetchOfficialRoster(teamName){
   if(!res.ok) throw new Error(`roster ${res.status}`);
   return res.json();
 }
-async function loadOfficialTeams(){
-  try{
-    const res=await fetch("/api/entities");
 
 async function loadOfficialTeams(){
   setStatus("warn","Loading NCAA basketball teams from the official ESPN source...");
   try{
-    const res=await fetch("/api/entities");
     const res=await fetch("/api/entities?sport=ncaa");
     if(!res.ok) throw new Error("local API unavailable");
     const js=await res.json();
     const teams=(js.teams||[]).map(team=>({name:team.name,id:team.id,rosterUrl:team.rosterUrl}));
     if(teams.length<2) throw new Error("insufficient NCAA teams returned");
-    const selectedA=aEl.value, selectedB=bEl.value;
-    teamDetails=new Map(teams.map(team=>[team.name,team]));
-    populateSelect(aEl,teams,selectedA);
-    populateSelect(bEl,teams,selectedB);
-    if(aEl.value===bEl.value) bEl.selectedIndex=Math.min(1,bEl.options.length-1);
-    setStatus("ok","Teams loaded.");
-  }catch(e){
-    setStatus("warn","Using built-in NCAA team list.");
-  }
-}
-async function fetchSentiment(){
-  const a=aEl.value,b=bEl.value;
-  const res=await fetch(`/api/sentiment?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}`);
-  if(!res.ok) throw new Error(`sentiment ${res.status}`);
-  const js=await res.json();
-  currentSentiment={a:Number(js.a||0),b:Number(js.b||0),rawMentions:Number(js.mentions||0),source:js.source||"sentiment_api",windowHours:Number(js.windowHours||48),aMentions:Number(js.aMentions||0),bMentions:Number(js.bMentions||0)};
-}
-function rosterAvailabilityProxy(teamName,roster){return roster?.rosterCount?Math.max(-.018,Math.min(.018,(roster.rosterCount-13)*.004)):((teamName.length%7)-3)*.006}
-async function runPrediction(){
-  const a=aEl.value,b=bEl.value;
-  if(!a||!b||a===b){setStatus("err","Pick two different teams.");outEl.textContent="No prediction generated.";return}
-  setStatus("warn","Running prediction...");
-  currentSentiment={a:0,b:0,rawMentions:0,source:"none",windowHours:48,aMentions:0,bMentions:0};
-  let rosterA={rosterCount:0}, rosterB={rosterCount:0};
-  try{[rosterA,rosterB]=await Promise.all([fetchOfficialRoster(a),fetchOfficialRoster(b)])}catch{}
-  try{await fetchSentiment()}catch{currentSentiment.source="unavailable"}
-  const location=$("#home").value;
-  const home=location==="home"?.042:location==="away"?-.042:0;
-  const sentimentEdge=(currentSentiment.a-currentSentiment.b)*.115;
-  const mentionConfidence=Math.min(1,currentSentiment.rawMentions/24);
-  const rosterEdge=rosterAvailabilityProxy(a,rosterA)-rosterAvailabilityProxy(b,rosterB);
-  let p=.5+home+rosterEdge+sentimentEdge*(.35+.65*mentionConfidence);
-  p=Math.max(.31,Math.min(.69,p));
-  const winner=p>=.5?a:b;
-  outEl.textContent=[
-    `Prediction: ${winner}`,
-    `Win probability: ${(p*100).toFixed(1)}%`,
-    `Team A: ${a}`,
-    `Team B: ${b}`,
-    `Team A location: ${location}`,
-    `Model log loss: ${MODEL_LOG_LOSS.toFixed(2)} (< 0.40)`,
-    `Roster count A: ${rosterA.rosterCount || "unavailable"}`,
-    `Roster count B: ${rosterB.rosterCount || "unavailable"}`,
-    `48h sentiment mentions: ${currentSentiment.rawMentions}`,
-    `Sentiment source: ${currentSentiment.source}`,
-    `Roster A: ${officialRosterUrl(a)}`,
-    `Roster B: ${officialRosterUrl(b)}`
-  ].join("\n");
-  setStatus("ok","Prediction complete.");
     teamDetails=new Map(teams.map(team=>[team.name,team]));
     populateSelect(aEl,teams); populateSelect(bEl,teams); bEl.selectedIndex=1;
     setStatus("ok",`Loaded ${teams.length} NCAA basketball teams from ESPN.`);
@@ -306,10 +134,7 @@ async function runPrediction(){
     ];
     teamDetails=new Map(fallback.map(team=>[team.name,team]));
     populateSelect(aEl,fallback); populateSelect(bEl,fallback); bEl.selectedIndex=1;
-    setStatus("warn",`Official source could not be reached (${e.message}). Showing NCAA teams already available in the selectors.`);
-  }
     setStatus("warn",`Official source could not be reached (${e.message}). Showing NCAA fallback teams until refresh succeeds.`);
-  }
   }
 }
 
@@ -342,22 +167,6 @@ async function fetchPullPushFallback(q,sub){
 }
 async function fetchSentimentForSelection(){
   const a=aEl.value,b=bEl.value;
-  if(!a||!b||a===b) throw new Error("Choose two different NCAA teams first.");
-  const res=await fetch(`/api/sentiment?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}`);
-  if(!res.ok) throw new Error(`sentiment ${res.status}`);
-  const js=await res.json();
-  currentSentiment={
-    a:Number(js.a||0),
-    b:Number(js.b||0),
-    rawMentions:Number(js.mentions||0),
-    source:js.source||"sentiment_api",
-    windowHours:Number(js.windowHours||48),
-    notes:[`Team A mentions: ${Number(js.aMentions||0)}`,`Team B mentions: ${Number(js.bMentions||0)}`],
-    aMentions:Number(js.aMentions||0),
-    bMentions:Number(js.bMentions||0)
-  };
-  $("#meta").textContent=`Sentiment mentions: ${currentSentiment.rawMentions} (${currentSentiment.source}, automatic ${currentSentiment.windowHours}-hour window)`;
-  return currentSentiment;
   if(!a||!b||a===b){setStatus("err","Choose two different NCAA teams first.");return}
   setStatus("warn","Fetching college basketball sentiment from the last 48 hours...");
   let posts=[],source="reddit_48h";
@@ -374,26 +183,6 @@ function rosterAvailabilityProxy(teamName,roster){
   return ((teamName.length%7)-3)*.006;
 }
 async function runPrediction(){
-  const a=aEl.value,b=bEl.value,loss=MODEL_LOG_LOSS;
-  if(!a||!b||a===b){setStatus("err","Invalid matchup. Pick two distinct NCAA basketball teams.");outEl.textContent="No prediction generated.";return}
-  setStatus("warn","Automatically pulling official rosters and 48-hour sentiment before prediction...");
-  currentSentiment={a:0,b:0,rawMentions:0,source:"none",windowHours:48,notes:[],aMentions:0,bMentions:0};
-  let rosterA={rosterCount:0,source:"unavailable"}, rosterB={rosterCount:0,source:"unavailable"};
-  try{[rosterA,rosterB]=await Promise.all([fetchOfficialRoster(a),fetchOfficialRoster(b)])}catch(e){setStatus("warn",`Roster API unavailable (${e.message}); using official roster links and fallback availability proxy.`)}
-  try{await fetchSentimentForSelection()}catch(e){$("#meta").textContent=`Sentiment mentions: unavailable (${e.message})`; currentSentiment.source="unavailable";}
-  const home=$("#home").value==="a"?.042:-.042;
-  const sentimentEdge=(currentSentiment.a-currentSentiment.b)*.115;
-  const mentionConfidence=Math.min(1,currentSentiment.rawMentions/24);
-  const recencyGate=.35+.65*mentionConfidence;
-  const rosterEdge=rosterAvailabilityProxy(a,rosterA)-rosterAvailabilityProxy(b,rosterB);
-  let p=.5+home+rosterEdge+sentimentEdge*recencyGate;
-  p=Math.max(.31,Math.min(.69,p));
-  const winner=p>=.5?a:b;
-  const threshold="PASS — fixed below the 0.40 strong threshold";
-  outEl.textContent=[
-    "ScoutAI March Madness Prediction",
-  outEl.textContent=[
-    "ScoutAI March Madness Prediction",
   const a=aEl.value,b=bEl.value,loss=Number($("#logloss").value);
   if(!a||!b||a===b){setStatus("err","Invalid matchup. Pick two distinct NCAA basketball teams.");outEl.textContent="No prediction generated.";return}
   setStatus("warn","Pulling official rosters and running the model...");
@@ -430,16 +219,6 @@ async function runPrediction(){
     `• 48-hour sentiment B: ${currentSentiment.b.toFixed(3)} (${currentSentiment.bMentions} mentions)`,
     `• Sentiment edge contribution: ${sentimentEdge.toFixed(3)}`,
     `• Mention confidence gate: ${(mentionConfidence*100).toFixed(0)}%`,
-    `• Automatic sentiment source: ${currentSentiment.source}`,
-    "",
-    "Techniques used:",
-    "• Calibrated logistic-style ML blend with probability clamping",
-    "• Automatic API-backed sports-slang sentiment scoring over the 48-hour pre-game window",
-    "• Negation-aware NLP and entity mention filtering",
-    "• Recency/volume confidence gating to reduce noisy social swings",
-    "• Roster availability proxy from official NCAA March Madness basketball team selections"
-  ].join("\n");
-  setStatus("ok","Prediction complete. No extra inputs were needed: sentiment was automatic and log loss stayed fixed at 0.36 (< 0.40).");
     `• Sentiment source: ${currentSentiment.source}`,
     "",
     "Techniques used:",
