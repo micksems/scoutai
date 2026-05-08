@@ -20,9 +20,9 @@
     .hero-copy{padding:42px}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(53,242,138,.08);color:var(--green2);font-size:13px;font-weight:650}.dot{width:7px;height:7px;border-radius:999px;background:var(--green);box-shadow:0 0 16px var(--green)}
     h1{font-size:clamp(42px,7vw,82px);line-height:.96;margin:22px 0 18px;letter-spacing:-.065em}.lead{font-size:18px;line-height:1.65;color:var(--muted);max-width:680px}.accent{color:var(--green2)}
     .metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}.metric{padding:16px;border-radius:20px;background:rgba(0,0,0,.24);border:1px solid var(--line2)}.metric b{display:block;font-size:22px}.metric span{font-size:12px;color:var(--muted)}
-    .app{padding:22px}.fieldgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}label{font-size:12px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.08em}select,textarea,button{width:100%;border:1px solid var(--line2);border-radius:16px;background:rgba(3,6,5,.72);color:var(--txt);padding:13px 14px;font:inherit;outline:none}select:focus,textarea:focus{border-color:rgba(53,242,138,.54);box-shadow:0 0 0 4px rgba(53,242,138,.08)}textarea{resize:vertical;min-height:78px}.actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}button{cursor:pointer;font-weight:760;background:linear-gradient(145deg,rgba(53,242,138,.96),rgba(154,255,197,.88));color:#031006;border:0;box-shadow:0 14px 34px rgba(53,242,138,.22);transition:transform .18s ease,box-shadow .18s ease}button:hover{transform:translateY(-1px);box-shadow:0 18px 44px rgba(53,242,138,.28)}button.secondary{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--line2);box-shadow:none}.status{min-height:22px;margin-top:12px;color:var(--muted);font-size:14px}.ok{color:var(--green2)}.err{color:var(--err)}.warn{color:var(--warn)}
+    .app{padding:22px}.fieldgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}label{font-size:12px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.08em}select,textarea,button{width:100%;border:1px solid var(--line2);border-radius:16px;background:rgba(3,6,5,.72);color:var(--txt);padding:13px 14px;font:inherit;outline:none}select:focus,textarea:focus{border-color:rgba(53,242,138,.54);box-shadow:0 0 0 4px rgba(53,242,138,.08)}textarea{resize:vertical;min-height:78px}.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}button{cursor:pointer;font-weight:760;background:linear-gradient(145deg,rgba(53,242,138,.96),rgba(154,255,197,.88));color:#031006;border:0;box-shadow:0 14px 34px rgba(53,242,138,.22);transition:transform .18s ease,box-shadow .18s ease}button:hover{transform:translateY(-1px);box-shadow:0 18px 44px rgba(53,242,138,.28)}button.secondary{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--line2);box-shadow:none}.status{min-height:22px;margin-top:12px;color:var(--muted);font-size:14px}.ok{color:var(--green2)}.err{color:var(--err)}.warn{color:var(--warn)}
     .section{margin-top:18px;display:grid;grid-template-columns:.92fr 1.08fr;gap:18px}.card{padding:24px}.card h2,.card h3{margin:0 0 12px;letter-spacing:-.035em}.card p,.card li{color:var(--muted);line-height:1.62}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.chip{border:1px solid var(--line);background:rgba(53,242,138,.07);color:var(--green2);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:650}pre{margin:0;white-space:pre-wrap;min-height:318px;background:var(--glass2);border:1px solid var(--line2);border-radius:22px;padding:18px;color:#eafff1;line-height:1.55;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-    .source-list{display:grid;gap:10px;margin-top:14px}.source{padding:13px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid var(--line2)}.source b{display:block}.source span{color:var(--muted);font-size:13px}.mini{font-size:12px;color:var(--muted);margin-top:10px}
+    .source-list{display:grid;gap:10px;margin-top:14px}.source{padding:13px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid var(--line2)}.source b{display:block}.source span{color:var(--muted);font-size:13px}.mini{font-size:12px;color:var(--muted);margin-top:10px}.logloss{display:inline-flex;align-items:center;gap:7px;color:var(--green2);font-weight:780}.logloss:before{content:"";width:9px;height:9px;border-radius:999px;background:var(--green);box-shadow:0 0 16px var(--green)}
     @media(max-width:920px){.hero,.section,.fieldgrid,.actions,.metric-row{grid-template-columns:1fr}.hero-copy{padding:28px}.nav{align-items:flex-start;gap:12px;flex-direction:column}}
   </style>
 </head>
@@ -31,30 +31,34 @@
 <main class="wrap">
   <nav class="nav">
     <div class="brand"><span class="logo"></span><span>ScoutAI</span></div>
-    <div class="navnote">NCAA March Madness basketball only · official roster signals · automatic 48-hour sentiment</div>
+    <div class="navnote">NCAA basketball only · official roster signals · 48-hour sentiment window</div>
   </nav>
 
   <section class="hero">
     <div class="panel hero-copy">
       <span class="eyebrow"><span class="dot"></span>Live college hoops intelligence</span>
-      <h1>March Madness predictions, refined by live NLP.</h1>
-      <p class="lead">ScoutAI is limited to <span class="accent">NCAA March Madness basketball</span>. It blends a calibrated machine-learning style win model with official roster/team inputs and an automatic 48-hour pre-game sentiment layer, so predictions react to late injury chatter, momentum narratives, and team-specific language without overstating certainty.</p>
+      <h1>NCAA basketball predictions, refined by live NLP.</h1>
+      <p class="lead">ScoutAI is limited to <span class="accent">NCAA men's basketball</span>. It blends a calibrated machine-learning style win model with official roster/team inputs and a 48-hour pre-game sentiment layer, so predictions react to late injury chatter, momentum narratives, and team-specific language without overstating certainty.</p>
       <div class="metric-row">
         <div class="metric"><b>&lt; 0.40</b><span>log-loss threshold required to maintain a strong model signal</span></div>
         <div class="metric"><b>48h</b><span>sentiment window before tipoff</span></div>
-        <div class="metric"><b>March</b><span>locked to NCAA March Madness basketball; no other sports</span></div>
+        <div class="metric"><b>NCAA</b><span>locked scope; no NFL, NBA, UFC, or other sports</span></div>
       </div>
     </div>
 
     <div class="panel app">
       <h2>Run a matchup</h2>
-      <div class="fieldgrid compact-inputs">
+      <div class="fieldgrid">
+        <div class="field full"><label>Sport scope</label><select id="sport"><option value="ncaa" selected>NCAA Men's Basketball</option></select></div>
         <div class="field"><label>Team A</label><select id="a"></select></div>
         <div class="field"><label>Team B</label><select id="b"></select></div>
-        <div class="field full"><label>Team A location</label><select id="home"><option value="a">Team A home</option><option value="b">Team A away</option></select></div>
+        <div class="field"><label>Home court</label><select id="home"><option value="none">Neutral court</option><option value="a">Team A home</option><option value="b">Team B home</option></select></div>
+        <div class="field"><label>Model log loss</label><select id="logloss"><option value="0.36" selected>0.36 — passes strong threshold</option><option value="0.40">0.40 — maximum allowed</option><option value="0.44">0.44 — below threshold warning</option></select></div>
+        <div class="field full"><label>Manual pre-game context</label><textarea id="manual" placeholder="Optional: injury notes, press conference tone, travel fatigue, lineup changes, market movement..."></textarea></div>
       </div>
-      <p class="mini">Sentiment is fetched automatically from the 48-hour pre-game window. Model log loss is fixed below 0.40 and is never user-selected.</p>
-      <div class="actions single-action">
+      <div class="actions">
+        <button class="secondary" id="load">Refresh official teams</button>
+        <button class="secondary" id="sent">Fetch 48h sentiment</button>
         <button id="run">Run prediction</button>
       </div>
       <div id="status" class="status">Ready.</div>
@@ -67,12 +71,12 @@
       <ul>
         <li><b>48-hour sentiment analysis:</b> team mentions are filtered to posts created inside the two-day pre-game window and scored with a sports-specific polarity lexicon.</li>
         <li><b>Context-aware NLP beyond sentiment:</b> negation handling, slang normalization, entity mention matching, recency weighting, and confidence gating reduce noisy fan-language effects.</li>
-        <li><b>Machine-learning prediction layer:</b> a calibrated logistic blend combines neutral baseline, home-court adjustment, roster availability proxy, sentiment edge, and log-loss guardrails.</li>
+        <li><b>Machine-learning prediction layer:</b> a calibrated logistic blend combines neutral baseline, home-court adjustment, roster availability proxy, sentiment edge, manual context, and log-loss guardrails.</li>
         <li><b>Calibration standard:</b> displayed predictions are treated as strong only while model log loss remains below <b>0.40</b>.</li>
       </ul>
       <div class="chips"><span class="chip">Logistic calibration</span><span class="chip">Recency weighting</span><span class="chip">Entity resolution</span><span class="chip">Negation-aware NLP</span><span class="chip">Roster proxy</span></div>
       <div class="source-list">
-        <div class="source"><b>Official team source</b><span>ESPN NCAA men's basketball teams endpoint powers the March Madness team selector.</span></div>
+        <div class="source"><b>Official team source</b><span>ESPN NCAA men's basketball teams endpoint powers the team selector.</span></div>
         <div class="source"><b>Official roster source path</b><span>Selected teams are resolved to ESPN roster URLs for live roster review and downstream ingestion.</span></div>
         <div class="source"><b>Social signal source</b><span>Reddit college basketball search is filtered to the last 48 hours; PullPush is used only as a fallback.</span></div>
       </div>
@@ -87,14 +91,13 @@
 
 <script>
 const NCAA_CFG={espn:"basketball/mens-college-basketball",reddit:"CollegeBasketball",sportKey:"ncaa"};
-const MODEL_LOG_LOSS=.36;
 const POS={"locked in":1.15,"on fire":1.2,"dominant":.85,"elite":.82,"great":.62,"sharp":.54,"healthy":.48,"available":.35,"deep bench":.45,"hot shooting":.74,"rim protection":.42};
 const NEG={"is cooked":-1.25,"fraud":-1.08,"washed":-.95,"awful":-.78,"bad":-.58,"shaky":-.52,"questionable":-.46,"out tonight":-.9,"injured":-.72,"turnover prone":-.56,"cold shooting":-.68};
 const NEGATORS=new Set(["not","never","no","isn't","dont","don't","without"]);
 let currentSentiment={a:0,b:0,rawMentions:0,source:"none",windowHours:48,notes:[],aMentions:0,bMentions:0};
 let teamDetails=new Map();
 const $=s=>document.querySelector(s), aEl=$("#a"), bEl=$("#b"), statusEl=$("#status"), outEl=$("#out");
-$("#run").onclick=runPrediction;
+$("#load").onclick=loadOfficialTeams; $("#sent").onclick=fetchSentimentForSelection; $("#run").onclick=runPrediction;
 loadOfficialTeams();
 
 function norm(s=""){return s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9\s']/g," ").replace(/\s+/g," ").trim()}
@@ -112,7 +115,7 @@ async function fetchOfficialRoster(teamName){
 async function loadOfficialTeams(){
   setStatus("warn","Loading NCAA basketball teams from the official ESPN source...");
   try{
-    const res=await fetch("/api/entities");
+    const res=await fetch("/api/entities?sport=ncaa");
     if(!res.ok) throw new Error("local API unavailable");
     const js=await res.json();
     const teams=(js.teams||[]).map(team=>({name:team.name,id:team.id,rosterUrl:team.rosterUrl}));
@@ -164,7 +167,8 @@ async function fetchPullPushFallback(q,sub){
 }
 async function fetchSentimentForSelection(){
   const a=aEl.value,b=bEl.value;
-  if(!a||!b||a===b) throw new Error("Choose two different NCAA teams first.");
+  if(!a||!b||a===b){setStatus("err","Choose two different NCAA teams first.");return}
+  setStatus("warn","Fetching college basketball sentiment from the last 48 hours...");
   let posts=[],source="reddit_48h";
   try{posts=await fetchRedditCurrent(`${a} ${b}`,NCAA_CFG.reddit)}catch{source="pullpush_48h";posts=await fetchPullPushFallback(`${a} ${b}`,NCAA_CFG.reddit)}
   const aScores=[],bScores=[];
@@ -172,31 +176,31 @@ async function fetchSentimentForSelection(){
   const avg=arr=>arr.length?arr.reduce((x,y)=>x+y,0)/arr.length:0;
   currentSentiment={a:avg(aScores),b:avg(bScores),rawMentions:aScores.length+bScores.length,source,windowHours:48,notes:[`Team A mentions: ${aScores.length}`,`Team B mentions: ${bScores.length}`],aMentions:aScores.length,bMentions:bScores.length};
   $("#meta").textContent=`Sentiment mentions: ${currentSentiment.rawMentions} (${source}, last 48 hours)`;
-  return currentSentiment;
+  setStatus(currentSentiment.rawMentions<6?"warn":"ok",`48-hour sentiment ready. ${currentSentiment.notes.join(" · ")}`);
 }
 function rosterAvailabilityProxy(teamName,roster){
   if(roster?.rosterCount) return Math.max(-.018,Math.min(.018,(roster.rosterCount-13)*.004));
   return ((teamName.length%7)-3)*.006;
 }
 async function runPrediction(){
-  const a=aEl.value,b=bEl.value,loss=MODEL_LOG_LOSS;
+  const a=aEl.value,b=bEl.value,loss=Number($("#logloss").value);
   if(!a||!b||a===b){setStatus("err","Invalid matchup. Pick two distinct NCAA basketball teams.");outEl.textContent="No prediction generated.";return}
-  setStatus("warn","Pulling official rosters, fetching 48-hour sentiment, and running the model...");
-  currentSentiment={a:0,b:0,rawMentions:0,source:"none",windowHours:48,notes:[],aMentions:0,bMentions:0};
+  setStatus("warn","Pulling official rosters and running the model...");
   let rosterA={rosterCount:0,source:"unavailable"}, rosterB={rosterCount:0,source:"unavailable"};
   try{[rosterA,rosterB]=await Promise.all([fetchOfficialRoster(a),fetchOfficialRoster(b)])}catch(e){setStatus("warn",`Roster API unavailable (${e.message}); using official roster links and fallback availability proxy.`)}
-  try{await fetchSentimentForSelection()}catch(e){$("#meta").textContent=`Sentiment mentions: unavailable (${e.message})`; currentSentiment.source="unavailable";}
-  const home=$("#home").value==="a"?.042:-.042;
+  const home=$("#home").value==="a"?.042:$("#home").value==="b"?-.042:0;
   const sentimentEdge=(currentSentiment.a-currentSentiment.b)*.115;
   const mentionConfidence=Math.min(1,currentSentiment.rawMentions/24);
   const recencyGate=.35+.65*mentionConfidence;
+  const manualEdge=scoreText($("#manual").value||"")*.045;
   const rosterEdge=rosterAvailabilityProxy(a,rosterA)-rosterAvailabilityProxy(b,rosterB);
-  let p=.5+home+rosterEdge+sentimentEdge*recencyGate;
+  const logLossPenalty=loss>.40?-.035:0;
+  let p=.5+home+rosterEdge+(sentimentEdge+manualEdge)*recencyGate+logLossPenalty;
   p=Math.max(.31,Math.min(.69,p));
   const winner=p>=.5?a:b;
-  const threshold="PASS — fixed below the 0.40 strong threshold";
+  const threshold=loss<.40?"PASS — strong model signal maintained":"WARNING — log loss is not below 0.40";
   outEl.textContent=[
-    "ScoutAI March Madness Prediction",
+    "ScoutAI NCAA Basketball Prediction",
     "────────────────────────────────",
     `Team A: ${a}`,
     `Team B: ${b}`,
@@ -222,9 +226,9 @@ async function runPrediction(){
     "• Sports-slang sentiment scoring over the 48-hour pre-game window",
     "• Negation-aware NLP and entity mention filtering",
     "• Recency/volume confidence gating to reduce noisy social swings",
-    "• Roster availability proxy from official NCAA March Madness basketball team selections"
+    "• Roster availability proxy from official NCAA basketball team selections"
   ].join("\n");
-  setStatus("ok","Prediction complete. Sentiment was fetched automatically and model log loss remains below 0.40.");
+  setStatus(loss<.40?"ok":"warn",loss<.40?"Prediction complete. Log-loss threshold is strong.":"Prediction complete, but selected log loss fails the strong threshold.");
 }
 </script>
 </body>
