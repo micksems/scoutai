@@ -6,24 +6,31 @@
   <title>ScoutAI — NCAA Basketball Predictions</title>
   <style>
     :root{
-      --bg:#050706;--bg2:#0b1410;--glass:rgba(18,24,21,.74);--glass2:rgba(12,17,15,.92);
-      --line:rgba(138,255,190,.16);--line2:rgba(255,255,255,.09);--txt:#f5fff9;--muted:#a8b6ad;
-      --green:#35f28a;--green2:#9affc5;--warn:#ffd166;--err:#ff718e;--shadow:0 24px 80px rgba(0,0,0,.45)
+      --ink:#f8fbff;--muted:#9aa8bd;--faint:#657188;--void:#050713;--night:#080b1f;--panel:rgba(13,18,38,.76);
+      --panel-strong:rgba(8,12,27,.92);--line:rgba(255,255,255,.12);--line-hot:rgba(115,255,216,.34);
+      --cyan:#73ffd8;--mint:#37f28a;--gold:#ffd166;--pink:#ff5fa2;--purple:#8d7dff;--err:#ff718e;
+      --shadow:0 28px 90px rgba(0,0,0,.52);--radius:30px;--radius-sm:18px
     }
     *{box-sizing:border-box} html{scroll-behavior:smooth}
-    body{margin:0;min-height:100vh;color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",Segoe UI,system-ui,sans-serif;background:radial-gradient(900px 520px at 18% -8%,rgba(53,242,138,.20),transparent 64%),radial-gradient(720px 480px at 92% 12%,rgba(154,255,197,.10),transparent 60%),linear-gradient(145deg,var(--bg),var(--bg2) 58%,#030403);letter-spacing:-.01em;overflow-x:hidden}
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.55),transparent 74%)}
-    .orb{position:fixed;border-radius:999px;filter:blur(48px);opacity:.26;pointer-events:none;animation:float 12s ease-in-out infinite}.o1{width:230px;height:230px;background:var(--green);left:5%;top:9%}.o2{width:180px;height:180px;background:#d7ffe6;right:12%;top:20%;animation-delay:2s}.o3{width:210px;height:210px;background:#1ad46f;left:55%;bottom:3%;animation-delay:4s}
-    @keyframes float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-18px,0)}}
-    .wrap{width:min(1180px,calc(100% - 36px));margin:0 auto;padding:28px 0 44px;position:relative;z-index:1}.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:42px}.brand{display:flex;gap:10px;align-items:center;font-weight:740}.logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(145deg,var(--green),#eafff1);box-shadow:0 0 34px rgba(53,242,138,.42)}
-    .navnote{color:var(--muted);font-size:13px}.hero{display:grid;grid-template-columns:1.08fr .92fr;gap:18px;align-items:stretch}.panel{background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));border:1px solid var(--line2);border-radius:30px;box-shadow:var(--shadow);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
-    .hero-copy{padding:42px}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(53,242,138,.08);color:var(--green2);font-size:13px;font-weight:650}.dot{width:7px;height:7px;border-radius:999px;background:var(--green);box-shadow:0 0 16px var(--green)}
-    h1{font-size:clamp(42px,7vw,82px);line-height:.96;margin:22px 0 18px;letter-spacing:-.065em}.lead{font-size:18px;line-height:1.65;color:var(--muted);max-width:680px}.accent{color:var(--green2)}
-    .metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}.metric{padding:16px;border-radius:20px;background:rgba(0,0,0,.24);border:1px solid var(--line2)}.metric b{display:block;font-size:22px}.metric span{font-size:12px;color:var(--muted)}
-    .app{padding:22px}.fieldgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}label{font-size:12px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.08em}select,textarea,button{width:100%;border:1px solid var(--line2);border-radius:16px;background:rgba(3,6,5,.72);color:var(--txt);padding:13px 14px;font:inherit;outline:none}select:focus,textarea:focus{border-color:rgba(53,242,138,.54);box-shadow:0 0 0 4px rgba(53,242,138,.08)}textarea{resize:vertical;min-height:78px}.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}button{cursor:pointer;font-weight:760;background:linear-gradient(145deg,rgba(53,242,138,.96),rgba(154,255,197,.88));color:#031006;border:0;box-shadow:0 14px 34px rgba(53,242,138,.22);transition:transform .18s ease,box-shadow .18s ease}button:hover{transform:translateY(-1px);box-shadow:0 18px 44px rgba(53,242,138,.28)}button.secondary{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--line2);box-shadow:none}.status{min-height:22px;margin-top:12px;color:var(--muted);font-size:14px}.ok{color:var(--green2)}.err{color:var(--err)}.warn{color:var(--warn)}
-    .section{margin-top:18px;display:grid;grid-template-columns:.92fr 1.08fr;gap:18px}.card{padding:24px}.card h2,.card h3{margin:0 0 12px;letter-spacing:-.035em}.card p,.card li{color:var(--muted);line-height:1.62}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.chip{border:1px solid var(--line);background:rgba(53,242,138,.07);color:var(--green2);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:650}pre{margin:0;white-space:pre-wrap;min-height:318px;background:var(--glass2);border:1px solid var(--line2);border-radius:22px;padding:18px;color:#eafff1;line-height:1.55;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-    .source-list{display:grid;gap:10px;margin-top:14px}.source{padding:13px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid var(--line2)}.source b{display:block}.source span{color:var(--muted);font-size:13px}.mini{font-size:12px;color:var(--muted);margin-top:10px}.logloss{display:inline-flex;align-items:center;gap:7px;color:var(--green2);font-weight:780}.logloss:before{content:"";width:9px;height:9px;border-radius:999px;background:var(--green);box-shadow:0 0 16px var(--green)}
-    @media(max-width:920px){.hero,.section,.fieldgrid,.actions,.metric-row{grid-template-columns:1fr}.hero-copy{padding:28px}.nav{align-items:flex-start;gap:12px;flex-direction:column}}
+    body{margin:0;min-height:100vh;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#050713;letter-spacing:-.015em;overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;z-index:-4;background:radial-gradient(900px 620px at 10% 0%,rgba(115,255,216,.19),transparent 62%),radial-gradient(740px 520px at 92% 8%,rgba(255,95,162,.17),transparent 58%),radial-gradient(760px 680px at 58% 102%,rgba(141,125,255,.2),transparent 60%),linear-gradient(135deg,#050713 0%,#0a1028 48%,#050713 100%)}
+    body:after{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.36;background:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(115deg,transparent 0 46%,rgba(115,255,216,.12) 47% 48%,transparent 49% 100%);background-size:72px 72px,72px 72px,360px 360px;mask-image:linear-gradient(to bottom,#000,rgba(0,0,0,.7),transparent 92%)}
+    .orb{position:fixed;z-index:-2;border-radius:999px;filter:blur(58px);opacity:.35;pointer-events:none;animation:float 14s ease-in-out infinite}.o1{width:310px;height:310px;background:var(--cyan);left:-90px;top:160px}.o2{width:260px;height:260px;background:var(--pink);right:-70px;top:88px;animation-delay:2.5s}.o3{width:300px;height:300px;background:var(--purple);left:50%;bottom:-110px;animation-delay:5s}
+    @keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(16px,-24px,0) scale(1.05)}}
+    .wrap{width:min(1240px,calc(100% - 36px));margin:0 auto;padding:24px 0 54px;position:relative;z-index:1}.nav{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:30px;padding:14px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(7,10,24,.54);box-shadow:0 16px 60px rgba(0,0,0,.26);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+    .brand{display:flex;gap:12px;align-items:center;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.logo{width:39px;height:39px;border-radius:15px;position:relative;background:conic-gradient(from 210deg,var(--cyan),var(--mint),var(--gold),var(--pink),var(--purple),var(--cyan));box-shadow:0 0 38px rgba(115,255,216,.28)}.logo:after{content:"";position:absolute;inset:8px;border-radius:10px;background:#071024;border:1px solid rgba(255,255,255,.2)}
+    .navnote{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;color:var(--muted);font-size:12px}.navnote span{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.045)}
+    .hero{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(380px,.97fr);gap:20px;align-items:stretch}.panel{position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.045));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}.panel:before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.22),transparent 26%,transparent 70%,rgba(115,255,216,.12));mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);padding:1px;mask-composite:exclude}
+    .hero-copy{padding:46px;min-height:620px;display:flex;flex-direction:column}.eyebrow{width:max-content;max-width:100%;display:inline-flex;align-items:center;gap:10px;padding:9px 13px;border:1px solid var(--line-hot);border-radius:999px;background:rgba(115,255,216,.08);color:var(--cyan);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.dot{width:8px;height:8px;border-radius:999px;background:var(--mint);box-shadow:0 0 22px var(--mint)}
+    h1{font-size:clamp(50px,7.4vw,94px);line-height:.88;margin:28px 0 20px;letter-spacing:-.078em;max-width:850px}.gradient-text{background:linear-gradient(90deg,#fff 0%,var(--cyan) 34%,var(--gold) 66%,var(--pink) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{font-size:18px;line-height:1.72;color:#c1cbda;max-width:720px}.accent{color:var(--cyan);font-weight:800}
+    .hero-stage{position:relative;flex:1;min-height:230px;margin-top:34px;border-radius:26px;background:radial-gradient(circle at center,rgba(115,255,216,.13),transparent 55%),linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line);overflow:hidden}.court{position:absolute;inset:18px;border:2px solid rgba(115,255,216,.22);border-radius:24px}.court:before{content:"";position:absolute;top:50%;left:0;right:0;border-top:2px solid rgba(115,255,216,.16)}.court:after{content:"";position:absolute;width:112px;height:112px;border:2px solid rgba(255,209,102,.22);border-radius:999px;left:50%;top:50%;transform:translate(-50%,-50%)}.scan{position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 42%,rgba(115,255,216,.18),transparent 58%);animation:scan 5.8s linear infinite}.player-dot{position:absolute;width:12px;height:12px;border-radius:999px;background:var(--pink);box-shadow:0 0 28px var(--pink)}.p1{left:22%;top:30%}.p2{left:39%;top:64%;background:var(--cyan);box-shadow:0 0 28px var(--cyan)}.p3{right:24%;top:42%;background:var(--gold);box-shadow:0 0 28px var(--gold)}@keyframes scan{to{transform:translateX(45%)}}
+    .metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.metric{padding:18px;border-radius:22px;background:rgba(0,0,0,.22);border:1px solid var(--line);position:relative;overflow:hidden}.metric:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--pink))}.metric b{display:block;font-size:28px;letter-spacing:-.04em}.metric span{display:block;margin-top:5px;font-size:12px;line-height:1.4;color:var(--muted)}
+    .app{padding:24px}.module-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:20px}.module-head h2,.card h3{margin:0;letter-spacing:-.045em}.pulse-badge{display:inline-flex;gap:7px;align-items:center;color:var(--cyan);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.pulse-badge:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 7px rgba(55,242,138,.09),0 0 22px var(--mint)}
+    .matchup-card{margin-bottom:18px;padding:18px;border-radius:24px;background:linear-gradient(135deg,rgba(115,255,216,.12),rgba(255,95,162,.08));border:1px solid var(--line)}.vs-grid{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}.team-token{min-height:82px;border:1px solid var(--line);border-radius:20px;background:rgba(5,7,19,.5);display:grid;place-items:center;text-align:center;padding:14px}.team-token small{display:block;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:800}.team-token strong{display:block;margin-top:5px;font-size:17px}.versus{width:50px;height:50px;border-radius:18px;display:grid;place-items:center;background:#fff;color:#091020;font-weight:1000;box-shadow:0 15px 35px rgba(0,0,0,.28)}
+    .fieldgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}label{font-size:11px;color:#b5c2d5;font-weight:900;text-transform:uppercase;letter-spacing:.12em}select,textarea,button{width:100%;border:1px solid var(--line);border-radius:17px;background:rgba(5,7,19,.72);color:var(--ink);padding:14px 15px;font:inherit;outline:none}select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--cyan) 50%),linear-gradient(135deg,var(--cyan) 50%,transparent 50%);background-position:calc(100% - 18px) 52%,calc(100% - 13px) 52%;background-size:5px 5px;background-repeat:no-repeat}select:focus,textarea:focus{border-color:rgba(115,255,216,.62);box-shadow:0 0 0 5px rgba(115,255,216,.09)}textarea{resize:vertical;min-height:92px}.actions{display:grid;grid-template-columns:1fr 1fr 1.05fr;gap:10px;margin-top:14px}button{cursor:pointer;font-weight:900;border:0;background:linear-gradient(135deg,var(--cyan),var(--mint) 48%,var(--gold));color:#04111a;box-shadow:0 18px 44px rgba(55,242,138,.24);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}button:hover{transform:translateY(-2px);box-shadow:0 24px 58px rgba(115,255,216,.28);filter:saturate(1.1)}button.secondary{background:rgba(255,255,255,.07);color:var(--ink);border:1px solid var(--line);box-shadow:none}.status{min-height:22px;margin-top:13px;color:var(--muted);font-size:14px}.ok{color:var(--cyan)}.err{color:var(--err)}.warn{color:var(--gold)}
+    .section{margin-top:20px;display:grid;grid-template-columns:.91fr 1.09fr;gap:20px}.card{padding:26px}.card p,.card li{color:#b9c4d3;line-height:1.68}.card ul{padding-left:20px}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.chip{border:1px solid rgba(115,255,216,.24);background:rgba(115,255,216,.07);color:var(--cyan);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800}.source-list{display:grid;gap:10px;margin-top:16px}.source{padding:14px;border-radius:18px;background:rgba(255,255,255,.055);border:1px solid var(--line)}.source b{display:block}.source span{color:var(--muted);font-size:13px;line-height:1.5}.mini{font-size:12px;color:var(--muted);margin-top:12px}.output-shell{padding:0;display:grid;grid-template-rows:auto 1fr}.scoreboard{padding:22px 24px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(115,255,216,.11),rgba(255,95,162,.08));display:grid;gap:15px}.score-top{display:flex;align-items:center;justify-content:space-between;gap:14px}.score-top h3{margin:0}.probability{font-size:40px;font-weight:1000;letter-spacing:-.07em;color:var(--cyan)}.meter{height:12px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;border:1px solid var(--line)}.meter span{display:block;height:100%;width:50%;border-radius:inherit;background:linear-gradient(90deg,var(--pink),var(--gold),var(--cyan));box-shadow:0 0 24px rgba(115,255,216,.45);transition:width .45s ease}pre{margin:0;white-space:pre-wrap;min-height:350px;background:rgba(4,7,18,.74);padding:22px 24px;color:#e9f7ff;line-height:1.58;font-size:13px;overflow:auto}.logloss{display:inline-flex;align-items:center;gap:7px;color:var(--cyan);font-weight:900}.logloss:before{content:"";width:9px;height:9px;border-radius:999px;background:var(--mint);box-shadow:0 0 16px var(--mint)}
+    @media(max-width:980px){.hero,.section{grid-template-columns:1fr}.hero-copy{min-height:auto}.metric-row,.fieldgrid,.actions{grid-template-columns:1fr}.nav{align-items:flex-start;border-radius:26px;flex-direction:column}.navnote{justify-content:flex-start}.vs-grid{grid-template-columns:1fr}.versus{margin:auto;transform:rotate(90deg)}}
+    @media(max-width:560px){.wrap{width:min(100% - 22px,1240px);padding-top:12px}.hero-copy,.app,.card{padding:20px}h1{font-size:46px}.hero-stage{min-height:190px}.metric-row{gap:9px}}
   </style>
 </head>
 <body>
@@ -31,23 +38,40 @@
 <main class="wrap">
   <nav class="nav">
     <div class="brand"><span class="logo"></span><span>ScoutAI</span></div>
-    <div class="navnote">NCAA basketball only · official roster signals · 48-hour sentiment window</div>
+    <div class="navnote"><span>NCAA basketball only</span><span>Official roster signals</span><span>48-hour sentiment window</span></div>
   </nav>
 
   <section class="hero">
     <div class="panel hero-copy">
-      <span class="eyebrow"><span class="dot"></span>Live college hoops intelligence</span>
-      <h1>NCAA basketball predictions, refined by live NLP.</h1>
-      <p class="lead">ScoutAI is limited to <span class="accent">NCAA men's basketball</span>. It blends a calibrated machine-learning style win model with official roster/team inputs and a 48-hour pre-game sentiment layer, so predictions react to late injury chatter, momentum narratives, and team-specific language without overstating certainty.</p>
+      <span class="eyebrow"><span class="dot"></span>Prediction war room online</span>
+      <h1>Turn game-day noise into <span class="gradient-text">court vision.</span></h1>
+      <p class="lead">ScoutAI is a cinematic command center for <span class="accent">NCAA men's basketball</span> picks. It fuses official team inputs, roster availability proxies, home-court effects, and 48-hour fan-language NLP into a guarded probability signal that looks as sharp as the model thinks.</p>
+      <div class="hero-stage" aria-hidden="true">
+        <span class="scan"></span>
+        <div class="court"></div>
+        <span class="player-dot p1"></span><span class="player-dot p2"></span><span class="player-dot p3"></span>
+      </div>
       <div class="metric-row">
-        <div class="metric"><b>&lt; 0.40</b><span>log-loss threshold required to maintain a strong model signal</span></div>
-        <div class="metric"><b>48h</b><span>sentiment window before tipoff</span></div>
-        <div class="metric"><b>NCAA</b><span>locked scope; no NFL, NBA, UFC, or other sports</span></div>
+        <div class="metric"><b>&lt; 0.40</b><span>log-loss standard for strong predictions</span></div>
+        <div class="metric"><b>48h</b><span>pre-tip sentiment capture window</span></div>
+        <div class="metric"><b>NCAA</b><span>locked to men's college basketball</span></div>
       </div>
     </div>
 
     <div class="panel app">
-      <h2>Run a matchup</h2>
+      <div class="module-head">
+        <div>
+          <span class="pulse-badge">Live model console</span>
+          <h2>Build a matchup</h2>
+        </div>
+      </div>
+      <div class="matchup-card" aria-live="polite">
+        <div class="vs-grid">
+          <div class="team-token"><small>Team A</small><strong id="teamAName">Loading…</strong></div>
+          <div class="versus">VS</div>
+          <div class="team-token"><small>Team B</small><strong id="teamBName">Loading…</strong></div>
+        </div>
+      </div>
       <div class="fieldgrid">
         <div class="field full"><label>Sport scope</label><select id="sport"><option value="ncaa" selected>NCAA Men's Basketball</option></select></div>
         <div class="field"><label>Team A</label><select id="a"></select></div>
@@ -57,8 +81,8 @@
         <div class="field full"><label>Manual pre-game context</label><textarea id="manual" placeholder="Optional: injury notes, press conference tone, travel fatigue, lineup changes, market movement..."></textarea></div>
       </div>
       <div class="actions">
-        <button class="secondary" id="load">Refresh official teams</button>
-        <button class="secondary" id="sent">Fetch 48h sentiment</button>
+        <button class="secondary" id="load">Refresh teams</button>
+        <button class="secondary" id="sent">Fetch sentiment</button>
         <button id="run">Run prediction</button>
       </div>
       <div id="status" class="status">Ready.</div>
@@ -67,11 +91,12 @@
 
   <section class="section">
     <div class="panel card">
-      <h3>NLP + ML techniques</h3>
+      <span class="eyebrow"><span class="dot"></span>Inside the model</span>
+      <h3>NLP + ML signal stack</h3>
       <ul>
         <li><b>48-hour sentiment analysis:</b> team mentions are filtered to posts created inside the two-day pre-game window and scored with a sports-specific polarity lexicon.</li>
-        <li><b>Context-aware NLP beyond sentiment:</b> negation handling, slang normalization, entity mention matching, recency weighting, and confidence gating reduce noisy fan-language effects.</li>
-        <li><b>Machine-learning prediction layer:</b> a calibrated logistic blend combines neutral baseline, home-court adjustment, roster availability proxy, sentiment edge, manual context, and log-loss guardrails.</li>
+        <li><b>Context-aware NLP:</b> negation handling, slang normalization, entity mention matching, recency weighting, and confidence gating reduce noisy fan-language effects.</li>
+        <li><b>Prediction layer:</b> a calibrated logistic blend combines neutral baseline, home-court adjustment, roster proxy, sentiment edge, manual context, and log-loss guardrails.</li>
         <li><b>Calibration standard:</b> displayed predictions are treated as strong only while model log loss remains below <b>0.40</b>.</li>
       </ul>
       <div class="chips"><span class="chip">Logistic calibration</span><span class="chip">Recency weighting</span><span class="chip">Entity resolution</span><span class="chip">Negation-aware NLP</span><span class="chip">Roster proxy</span></div>
@@ -82,8 +107,11 @@
       </div>
       <p class="mini" id="meta">Sentiment mentions: —</p>
     </div>
-    <div class="panel card">
-      <h3>Prediction output</h3>
+    <div class="panel output-shell">
+      <div class="scoreboard">
+        <div class="score-top"><h3>Prediction output</h3><div class="probability" id="probability">--%</div></div>
+        <div class="meter" aria-hidden="true"><span id="probabilityMeter"></span></div>
+      </div>
       <pre id="out">No prediction yet.</pre>
     </div>
   </section>
@@ -97,12 +125,16 @@ const NEGATORS=new Set(["not","never","no","isn't","dont","don't","without"]);
 let currentSentiment={a:0,b:0,rawMentions:0,source:"none",windowHours:48,notes:[],aMentions:0,bMentions:0};
 let teamDetails=new Map();
 const $=s=>document.querySelector(s), aEl=$("#a"), bEl=$("#b"), statusEl=$("#status"), outEl=$("#out");
+const teamAName=$("#teamAName"), teamBName=$("#teamBName"), probabilityEl=$("#probability"), probabilityMeter=$("#probabilityMeter");
 $("#load").onclick=loadOfficialTeams; $("#sent").onclick=fetchSentimentForSelection; $("#run").onclick=runPrediction;
+aEl.addEventListener("change",syncMatchupCard); bEl.addEventListener("change",syncMatchupCard);
 loadOfficialTeams();
 
 function norm(s=""){return s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9\s']/g," ").replace(/\s+/g," ").trim()}
 function setStatus(cls,msg){statusEl.className="status "+cls;statusEl.textContent=msg}
-function populateSelect(el,arr){el.innerHTML="";arr.forEach(team=>el.add(new Option(team.name,team.name)))}
+function syncMatchupCard(){teamAName.textContent=aEl.value||"Select team";teamBName.textContent=bEl.value||"Select team"}
+function setProbabilityVisual(p){probabilityEl.textContent=`${(p*100).toFixed(1)}%`;probabilityMeter.style.width=`${Math.round(p*100)}%`}
+function populateSelect(el,arr){el.innerHTML="";arr.forEach(team=>el.add(new Option(team.name,team.name)));syncMatchupCard()}
 function officialRosterUrl(teamName){return teamDetails.get(teamName)?.rosterUrl || "Official roster URL loads after ESPN team refresh"}
 async function fetchOfficialRoster(teamName){
   const team=teamDetails.get(teamName);
@@ -121,7 +153,7 @@ async function loadOfficialTeams(){
     const teams=(js.teams||[]).map(team=>({name:team.name,id:team.id,rosterUrl:team.rosterUrl}));
     if(teams.length<2) throw new Error("insufficient NCAA teams returned");
     teamDetails=new Map(teams.map(team=>[team.name,team]));
-    populateSelect(aEl,teams); populateSelect(bEl,teams); bEl.selectedIndex=1;
+    populateSelect(aEl,teams); populateSelect(bEl,teams); bEl.selectedIndex=1; syncMatchupCard();
     setStatus("ok",`Loaded ${teams.length} NCAA basketball teams from ESPN.`);
   }catch(e){
     const fallback=[
@@ -133,7 +165,7 @@ async function loadOfficialTeams(){
       {name:"Gonzaga Bulldogs",id:"2250",rosterUrl:"https://www.espn.com/mens-college-basketball/team/roster/_/id/2250"}
     ];
     teamDetails=new Map(fallback.map(team=>[team.name,team]));
-    populateSelect(aEl,fallback); populateSelect(bEl,fallback); bEl.selectedIndex=1;
+    populateSelect(aEl,fallback); populateSelect(bEl,fallback); bEl.selectedIndex=1; syncMatchupCard();
     setStatus("warn",`Official source could not be reached (${e.message}). Showing NCAA fallback teams until refresh succeeds.`);
   }
 }
@@ -198,6 +230,7 @@ async function runPrediction(){
   let p=.5+home+rosterEdge+(sentimentEdge+manualEdge)*recencyGate+logLossPenalty;
   p=Math.max(.31,Math.min(.69,p));
   const winner=p>=.5?a:b;
+  setProbabilityVisual(p);
   const threshold=loss<.40?"PASS — strong model signal maintained":"WARNING — log loss is not below 0.40";
   outEl.textContent=[
     "ScoutAI NCAA Basketball Prediction",
